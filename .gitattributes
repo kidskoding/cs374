@@ -1,0 +1,7 @@
+# Linguist treats Org as prose and omits prose languages from the language bar.
+# Force it to count, so the repo shows as Org rather than "no language".
+*.org linguist-detectable=true
+*.org linguist-language=Org
+
+# generated output, not source
+*.pdf linguist-generated=true
