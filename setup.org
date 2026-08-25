@@ -2,6 +2,9 @@
 # every #+INCLUDE, so anything that errors on redefinition must be guarded.
 #+LATEX_HEADER: \usepackage{amsmath,amssymb,mathtools,amsthm}
 #+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+# flush-left paragraphs (parindent 0) with a small gap. parskip's own default
+# is .5\baselineskip, which it also applies between list items -- far too airy.
+#+LATEX_HEADER: \usepackage[skip=4pt]{parskip}
 
 #+LATEX_HEADER: \makeatletter
 #+LATEX_HEADER: \@ifundefined{theorem}{\newtheorem{theorem}{Theorem}}{}
