@@ -5,6 +5,7 @@
 
 *Important Terms*
 
+
 ** Alphabets
 
 Let \Sigma be an *alphabet*, an arbitrary *finite* set of *symbols* or *characters*
@@ -38,7 +39,7 @@ the number of symbols in $w$
 \[
 \lvert w \rvert := \begin{cases}
   0 & \text{ if } w = \varepsilon \\
-  1 + \lvert x \rvert & \text{ if } w = a \cdot x
+  1 + \lvert x \rvert & \text{ if } w = ax
 \end{cases}
 \]
 
@@ -53,20 +54,20 @@ the number of symbols in $w$
 
 ** Concatenation
 
- Let *concatenation*, $w \cdot z$, of strings $w$ and $z$ be represented as
+ Let *concatenation*, $w \concat z$, of strings $w$ and $z$ be represented as
  \[
-    w \cdot z := \begin{cases}
+    w \concat z := \begin{cases}
     z & \text{ if } w = \varepsilon \\
-    (a, x \cdot z) & \text{ if } w = a \cdot z
+    (a, x \concat z) & \text{ if } w = ax
     \end{cases}
  \]
 
 *** Example
 
 \begin{align*}
-NOW \cdot HERE &= N \cdot (OW \cdot HERE) \\
-&= N \cdot (O \cdot (W \cdot HERE)) \\
-&= N \cdot (O \cdot (W \cdot (\varepsilon \cdot HERE))) \\
+NOW \concat HERE &= N \cdot (OW \concat HERE) \\
+&= N \cdot (O \cdot (W \concat HERE)) \\
+&= N \cdot (O \cdot (W \cdot (\varepsilon \concat HERE))) \\
 &= N \cdot (O \cdot (W \cdot HERE)) \\
 &= NOWHERE \\
 \end{align*}
@@ -79,4 +80,60 @@ NOW \cdot HERE &= N \cdot (OW \cdot HERE) \\
 - Use inductive hypothesis when its useful
 - End by pointing out you handled all cases
 
-*** Example
+*** Example 1
+
+For every string, $w$
+
+\[
+  w \concat \varepsilon = w
+\]
+
+Let $w$ be an arbitrary string. Assume for all string $x$, $\lvert x \rvert < \lvert w \rvert$, such that $x \concat \varepsilon = x$
+
+Suppose $w = \varepsilon$. Then,
+
+\begin{align*}
+w \concat \varepsilon &= \varepsilon \concat \varepsilon && \text{since } w = \varepsilon \\
+               &= \varepsilon              && \text{by definition of concatenation } (\concat) \\
+               &= w                 && \text{since } w = \varepsilon
+\end{align*}
+
+
+*** Example 2
+
+Suppose $w = a \concat x$ for symbol $a$ and string $x$. Prove that in all cases, $w \concat \varepsilon = w$
+
+ \begin{align*}
+ w \concat \varepsilon &= (a \cdot x) \concat \varepsilon && (w = ax) \\
+ &= a \cdot (x \concat \varepsilon) && (\text{by definition of } \concat) \\
+ &= a \cdot x && (\text{inductive hypothesis}) \\
+ &= w && (w = ax)
+ \end{align*}
+
+ Therefore, in all cases, $w \concat \varepsilon = w$
+
+*** Example 3
+
+ Let $w$ and $z$ be arbitrary, upon the assumption that for every string $x$ such that $\lvert x \rvert < \lvert w \rvert$, that $\lvert x \concat z \rvert = \lvert x \rvert + \lvert z \rvert$
+
+ 1. Suppose that $w = \varepsilon$
+
+    Then,
+    \begin{align*}
+    \lvert w \concat z \rvert &= \lvert \varepsilon \concat z \rvert && w = \varepsilon \\
+    &= \lvert z \rvert && \text{by definition of concatenation } \concat \\
+    &= 0 + \lvert z \rvert && \text{arithmetic} \\
+    &= \lvert \varepsilon \rvert + \lvert x \rvert && \text{by definition of length of string} \\
+    &= \lvert w \rvert + \lvert z \rvert && w = \varepsilon
+    \end{align*}
+
+ 2. Suppose that $w = a \cdot x$ for some symbol $a$ and string $x$.
+
+    Then,
+    \begin{align*}
+    \lvert w \concat z \rvert &= \lvert (a \cdot x) \concat z \rvert && w = a \cdot x \\
+    &= \lvert a \cdot (x \concat z) \rvert && \text{by definition of concatenation } \concat \\
+    &= 1 + \lvert x \concat z \rvert && \text{inductive hypothesis} \\
+    &= 1 + \lvert x \rvert + \lvert z \rvert && \text{by definition of length of string} \\
+    &= \lvert w \rvert + \lvert z \rvert && w = a \cdot x
+    \end{align*}

@@ -6,6 +6,11 @@
 # is .5\baselineskip, which it also applies between list items -- far too airy.
 #+LATEX_HEADER: \usepackage[skip=4pt]{parskip}
 
+# notation. \providecommand, not \newcommand: this file is loaded twice (see
+# above), and \newcommand errors on redefinition.
+#+LATEX_HEADER: \providecommand{\concat}{\bullet}
+#+LATEX_HEADER: \providecommand{\eps}{\varepsilon}
+
 #+LATEX_HEADER: \makeatletter
 #+LATEX_HEADER: \@ifundefined{theorem}{\newtheorem{theorem}{Theorem}}{}
 #+LATEX_HEADER: \@ifundefined{lemma}{\newtheorem{lemma}{Lemma}}{}
