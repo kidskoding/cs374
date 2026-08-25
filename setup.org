@@ -1,0 +1,9 @@
+# Shared LaTeX preamble. The master pulls this in directly *and* again through
+# every #+INCLUDE, so anything that errors on redefinition must be guarded.
+#+LATEX_HEADER: \usepackage{amsmath,amssymb,mathtools,amsthm}
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \@ifundefined{theorem}{\newtheorem{theorem}{Theorem}}{}
+#+LATEX_HEADER: \@ifundefined{lemma}{\newtheorem{lemma}{Lemma}}{}
+#+LATEX_HEADER: \makeatother

@@ -1,0 +1,13 @@
+#+TITLE: UIUC CS 374: Introduction to Algorithms and Models of Computation
+#+AUTHOR: Anirudh Konidala
+#+DATE: August 2026 -- December 2026 (Fall 2026)
+#+SETUPFILE: setup.org
+
+# titlepage puts \maketitle on its own page instead of at the top of page 1
+#+LATEX_CLASS_OPTIONS: [11pt,titlepage]
+
+#+LATEX: \clearpage
+
+#+INCLUDE: "lec01.org"
+
+#+OPTIONS: toc:t num:t title:t

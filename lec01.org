@@ -1,0 +1,82 @@
+#+SETUPFILE: setup.org
+#+OPTIONS: toc:nil title:nil
+
+* Lecture 01 - Introduction to CS 374
+
+*Important Terms*
+
+** Alphabets
+
+Let \Sigma be an *alphabet*, an arbitrary *finite* set of *symbols* or *characters*
+
+Examples include:
+- \Sigma $= \{ A, B, \dots, Z \}$
+- \Sigma $= \{0, 1\}$
+
+** Strings
+
+A *string* or *word* is a *finite* sequence of symbols from an alphabet
+
+Formally speaking, $w$ is a string over \Sigma if it is one of
+- the *empty string*
+- an ordered pair $\left(a, x\right)$, where $a \in \Sigma$ and $x$ is a string over \Sigma
+
+*** Example
+
+\begin{align*}
+ STRING &= (S, (TRING)) \\
+ &= (S, (T, (RING))) \\
+ &= \dots \\
+ &= (S, (T, (R, (I, (N, (G, \varepsilon))))))
+\end{align*}
+
+** Functions
+
+*Functions* are defined recursively, where length $|w|$ represents
+the number of symbols in $w$
+
+\[
+\lvert w \rvert := \begin{cases}
+  0 & \text{ if } w = \varepsilon \\
+  1 + \lvert x \rvert & \text{ if } w = a \cdot x
+\end{cases}
+\]
+
+*** Example
+
+\begin{align*}
+\lvert HAT \rvert &= 1 + \lvert AT \rvert \\
+&= 1 + (1 + \lvert T \rvert) \\
+&= 1 + (1 + (1 + \lvert \varepsilon \rvert)) \\
+&= \boxed{3}
+\end{align*}
+
+** Concatenation
+
+ Let *concatenation*, $w \cdot z$, of strings $w$ and $z$ be represented as
+ \[
+    w \cdot z := \begin{cases}
+    z & \text{ if } w = \varepsilon \\
+    (a, x \cdot z) & \text{ if } w = a \cdot z
+    \end{cases}
+ \]
+
+*** Example
+
+\begin{align*}
+NOW \cdot HERE &= N \cdot (OW \cdot HERE) \\
+&= N \cdot (O \cdot (W \cdot HERE)) \\
+&= N \cdot (O \cdot (W \cdot (\varepsilon \cdot HERE))) \\
+&= N \cdot (O \cdot (W \cdot HERE)) \\
+&= NOWHERE \\
+\end{align*}
+
+** Induction
+
+- Consider an arbitrary object (probably of size $n$)
+- *Explicitly* state a *strong* inductive hypothesis (i.e. ~for all k < n~
+- Explicitly handle each case for the object
+- Use inductive hypothesis when its useful
+- End by pointing out you handled all cases
+
+*** Example
