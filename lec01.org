@@ -69,7 +69,7 @@ NOW \concat HERE &= N \cdot (OW \concat HERE) \\
 &= N \cdot (O \cdot (W \concat HERE)) \\
 &= N \cdot (O \cdot (W \cdot (\varepsilon \concat HERE))) \\
 &= N \cdot (O \cdot (W \cdot HERE)) \\
-&= NOWHERE \\
+&= \boxed{NOWHERE} \\
 \end{align*}
 
 ** Induction

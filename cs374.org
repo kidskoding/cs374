@@ -10,4 +10,8 @@
 
 #+INCLUDE: "lec01.org"
 
+# problem sets come after every lecture. Keep this block last.
+#+LATEX: \clearpage
+#+INCLUDE: "problem-sets/probset01.org"
+
 #+OPTIONS: toc:t num:t title:t
