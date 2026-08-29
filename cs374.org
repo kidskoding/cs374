@@ -10,8 +10,13 @@
 
 #+INCLUDE: "lec01.org"
 
-# problem sets come after every lecture. Keep this block last.
+# Everything past \appendix is lettered A, B, C... instead of continuing the
+# lecture numbering. Keep this block last.
 #+LATEX: \clearpage
+#+LATEX: \appendix
+
 #+INCLUDE: "problem-sets/probset01.org"
+
+#+INCLUDE: "labs/lab01.org"
 
 #+OPTIONS: toc:t num:t title:t

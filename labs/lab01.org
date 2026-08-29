@@ -1,0 +1,5 @@
+#+SETUPFILE: ../setup.org
+#+OPTIONS: toc:nil title:nil
+
+* Lab 01
+

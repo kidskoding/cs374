@@ -8,4 +8,5 @@
   . ((+org-live-pdf-children
       . (("."             "lectures"       t)
          ("problem-sets"  nil              t)
+         ("labs"          nil              t)
          ("homeworks/org" "homeworks/pdfs" nil))))))
