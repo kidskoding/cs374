@@ -1,10 +1,9 @@
 #import "../setup.typ": *
 
 #let body = [
-= Lab 01
+== Lab 1
 
 ]
 
 #show: notes
-#set heading(numbering: "1.1")
 #body
