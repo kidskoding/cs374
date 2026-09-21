@@ -2,7 +2,6 @@
 
 #let body = [
 = Lecture 01 - Introduction to CS 374
-*Important Terms*
 
 == Alphabets
 Let Σ be an *alphabet*, an arbitrary *finite* set of *symbols* or *characters*
