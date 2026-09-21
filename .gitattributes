@@ -1,7 +1,6 @@
-# Linguist treats Org as prose and omits prose languages from the language bar.
-# Force it to count, so the repo shows as Org rather than "no language".
-*.org linguist-detectable=true
-*.org linguist-language=Org
+# Count the Typst sources in the repository language bar.
+*.typ linguist-detectable=true
+*.typ linguist-language=Typst
 
 # generated output, not source
-*.pdf linguist-generated=true
+*.pdf binary linguist-generated=true
