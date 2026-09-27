@@ -8,3 +8,6 @@ out/
 
 # Stray root-level lecture builds; the Makefile emits these to lectures/
 /lec[0-9]*.pdf
+
+# individual nvim rules
+.nvim.lua
