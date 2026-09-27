@@ -11,6 +11,16 @@
   body
 }
 
+#let appendix(body) = {
+  set heading(numbering: "A.1", supplement: [Appendix])
+  show heading.where(level: 1): it => {
+    set text(size: 1.4em, weight: "bold")
+    block(above: 1.8em, below: 1em)[Appendix #counter(heading).display("A"): #it.body]
+  }
+  counter(heading).update(0)
+  body
+}
+
 #let homework(title: "", date: "", body) = {
   set document(title: title, author: "Anirudh Konidala")
   show: notes

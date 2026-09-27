@@ -1,4 +1,4 @@
-#import "setup.typ": notes
+#import "setup.typ": notes, appendix
 #import "lec01.typ": body as lecture-01
 #import "problem-sets/probset01.typ": body as problem-set-01
 #import "labs/lab01.typ": body as lab-01
@@ -28,13 +28,9 @@
 
 // Appendices follow all lectures as back matter.
 #pagebreak()
-#counter(heading).update(0)
-#heading(level: 1, numbering: none)[Appendix A: Problem Sets]
-#counter(heading).update((1, 0))
-#set heading(numbering: "A.1")
-#problem-set-01
-#pagebreak()
-#heading(level: 1, numbering: none)[Appendix B: Labs]
-#counter(heading).update((2, 0))
-#set heading(numbering: "A.1")
+#show: appendix
+= Labs
 #lab-01
+#pagebreak()
+= Problem Sets
+#problem-set-01
