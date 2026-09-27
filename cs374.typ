@@ -1,7 +1,7 @@
 #import "setup.typ": notes, appendix
 #import "lec01.typ": body as lecture-01
 #import "problem-sets/probset01.typ": body as problem-set-01
-#import "labs/lab01.typ": body as lab-01
+#import "labs/lab01a.typ": body as lab-01
 
 #set document(
   title: "UIUC CS 374: Introduction to Algorithms and Models of Computation",
