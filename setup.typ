@@ -4,10 +4,13 @@
 
 #let notes(body) = {
   set page(paper: "us-letter", margin: 1in, numbering: "1")
-  set text(font: "Libertinus Serif", size: 11pt, lang: "en")
-  set par(first-line-indent: 0pt, leading: 0.65em, spacing: 0.65em + 4pt)
-  set list(spacing: 4pt)
-  set enum(spacing: 4pt)
+  set text(font: "New Computer Modern", size: 11pt, lang: "en")
+  show heading: set block(above: 1.6em, below: 0.9em)
+  set par(first-line-indent: 0pt, justify: true, leading: 0.8em, spacing: 1.4em)
+  set list(spacing: 1.2em)
+  set enum(spacing: 1.2em)
+  set math.cases(gap: 0.6em)
+  show math.equation.where(block: true): set block(above: 1.6em, below: 1.6em)
   body
 }
 
@@ -24,9 +27,6 @@
 #let homework(title: "", date: "", body) = {
   set document(title: title, author: "Anirudh Konidala")
   show: notes
-  set par(justify: true, spacing: 1.15em)
-  set list(spacing: 0.95em)
-  set enum(spacing: 0.95em)
   set heading(numbering: none)
   show heading: set text(size: 13pt)
   show heading: set block(above: 1.8em, below: 0.9em)
