@@ -29,7 +29,7 @@ $ w^R := cases(
   x^R bullet a & quad "if" w = a x "for some symbol" a "and some string" x
 ) $
 
-For example, $#raw("STRESSED")^R$ = `DESSERTS` and $#raw("WTF374")^R$ = `473FTW`.
+For example, $lit("STRESSED")^R = lit("DESSERTS")$ and $lit("WTF374")^R = lit("473FTW")$.
 
 #linebreak()
 

@@ -11,3 +11,7 @@ out/
 
 # individual nvim rules
 .nvim.lua
+
+# tinymist on-type exports land next to the source; real builds go to */pdfs/
+/labs/*.pdf
+/problem-sets/*.pdf
