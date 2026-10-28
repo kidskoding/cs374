@@ -113,7 +113,7 @@ Every simple deterministic pivot rule has bad inputs that force this: the first
 element, the last element, even the median of the first, middle and last elements.
 
 === Worst-case analysis
-*This course uses worst-case analysis.* A stated running time must hold for every
+*This course uses worst-case analysis:* A stated running time must hold for every
 input. So all we can promise for quicksort is $O(n^2)$.
 
 A loose bound such as $O(n!)$ is technically correct but useless, and is marked

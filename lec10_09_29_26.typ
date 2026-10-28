@@ -3,7 +3,7 @@
 #let body = [
 = Lecture 10 (Sep 29) - Recursion: Tower of Hanoi and Mergesort
 
-#keyidea[*Shrink, trust, combine.* Turn a big problem into smaller copies of
+#keyidea[*Shrink, trust, combine:* Turn a big problem into smaller copies of
 the same problem. Trust that the copies get solved. Combine the answers.]
 
 The course now moves from _models of computation_ (DFAs, grammars, Turing machines) to
@@ -36,7 +36,7 @@ What a "describe an algorithm" answer needs on homework and exams:
   [Running time: recurrence + solution], [A loose bound "just to be safe"],
 ))
 
-#trap[*Greedy algorithms need a formal proof.* They often look right and are wrong.
+#trap[*Greedy algorithms need a formal proof:* They often look right and are wrong.
 Without a proof, graders assume a greedy algorithm is incorrect.]
 
 How answers are graded (target runtimes are not given):
@@ -51,7 +51,7 @@ How answers are graded (target runtimes are not given):
   [No], [Fast], [Very little],
 ))
 
-#keyidea[*Correctness first, then speed.*]
+#keyidea[*Correctness first, then speed:*]
 
 == Reductions and Recursion
 A *reduction* solves problem $A$ by using a solver for problem $B$ as a *black box*
@@ -246,7 +246,7 @@ A picture of every recursive call, used to *solve* recurrences.
 - A node's *children* are the recursive calls it makes.
 - A node's *value* is the work done in that call, *not counting* its children.
 
-#keyidea[*Total time = sum of all node values.* Add up each level (row) first, then
+#keyidea[*Total time = sum of all node values:* Add up each level (row) first, then
 add up the levels.]
 
 === Mergesort
@@ -268,7 +268,7 @@ $n / 2$ work. Each grandchild does $n / 4$. And so on, down to size $1$.
   plain: (4,),
 )
 
-- *Every level sums to $n$.*
+- *Every level sums to $n$:*
 - *How many levels?* Each level halves the size: $n -> n/2 -> n/4 -> dots -> 1$. You
   can halve $n$ only $log_2 n$ times before reaching $1$.
 
