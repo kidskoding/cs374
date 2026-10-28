@@ -14,6 +14,7 @@
 #import "labs/lab01b.typ": body as lab-01b 
 
 #import "problem-sets/probset01.typ": body as prob-set-01
+#import "final-review.typ": body as final-review
 
 #set document(
   title: "UIUC CS 374: Introduction to Algorithms and Models of Computation",
@@ -52,6 +53,8 @@
 // Appendices follow all lectures as back matter.
 #pagebreak()
 #show: appendix
+#final-review
+#pagebreak()
 = Labs
 // Each lab starts on a new page; Lab 1A shares the page with the appendix title.
 #lab-01a

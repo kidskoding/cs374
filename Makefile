@@ -8,7 +8,7 @@ LABS := $(wildcard labs/*.typ)
 LAB_PDFS := $(patsubst labs/%.typ,labs/pdfs/%.pdf,$(LABS))
 PROBLEM_SETS := $(wildcard problem-sets/*.typ)
 PROBLEM_SET_PDFS := $(patsubst problem-sets/%.typ,problem-sets/pdfs/%.pdf,$(PROBLEM_SETS))
-BOOK_SOURCES := $(LECTURES) $(wildcard labs/*.typ problem-sets/*.typ)
+BOOK_SOURCES := $(LECTURES) final-review.typ $(wildcard labs/*.typ problem-sets/*.typ)
 DIAGRAMS := $(wildcard homeworks/diagrams/*.svg)
 
 .PHONY: all book lectures homeworks labs problem-sets watch
