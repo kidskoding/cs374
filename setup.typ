@@ -30,6 +30,7 @@
   set math.cases(gap: 0.6em)
   show math.equation.where(block: true): set block(above: 1.6em, below: 1.6em)
   show table: it => block(breakable: false, it)
+  show table: set par(justify: false)
   body
 }
 
