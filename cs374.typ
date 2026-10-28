@@ -4,6 +4,7 @@
 #import "lec10_09_29_26.typ": body as lecture-10
 #import "lec11_10_01_26.typ": body as lecture-11
 #import "lec12_10_06_26.typ": body as lecture-12
+#import "lec13_10_08_26.typ": body as lecture-13
 
 #import "labs/lab01a.typ": body as lab-01a 
 #import "labs/lab01b.typ": body as lab-01b 
@@ -38,6 +39,7 @@
 #lecture-10
 #lecture-11
 #lecture-12
+#lecture-13
 
 // Appendices follow all lectures as back matter.
 #pagebreak()
