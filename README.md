@@ -15,7 +15,7 @@ You can also compile or watch individual documents directly, from this directory
 
 ```sh
 typst compile --root . cs374.typ cs374.pdf
-typst watch --root . lec01.typ lectures/lec01.pdf
+typst watch --root . lec01_08_25_26.typ lectures/lec01_08_25_26.pdf
 typst watch --root . homeworks/typst/hw03p2.typ homeworks/pdfs/hw03p2.pdf
 ```
 
@@ -24,7 +24,7 @@ typst watch --root . homeworks/typst/hw03p2.typ homeworks/pdfs/hw03p2.pdf
 `#theorem[Every finite language is regular.]` after importing the template.
 
 Each lecture, lab, and problem set exports a `body` for the book and also compiles
-on its own. To add a lecture, copy the structure of `lec01.typ`, then import and
+on its own. To add a lecture, name it `lecNN_MM_DD_YY.typ` (lecture number and date), copy the structure of `lec01_08_25_26.typ`, then import and
 place its body in `cs374.typ` before the appendix block. The Makefile discovers
 new `lec*.typ` files automatically for standalone PDFs. Add labs and problem sets
 to the book's appendix block in the desired order.

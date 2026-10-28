@@ -1,8 +1,8 @@
 #import "setup.typ": notes, appendix
 
-#import "lec01.typ": body as lecture-01
-#import "lec10.typ": body as lecture-10
-#import "lec11.typ": body as lecture-11
+#import "lec01_08_25_26.typ": body as lecture-01
+#import "lec10_09_29_26.typ": body as lecture-10
+#import "lec11_10_01_26.typ": body as lecture-11
 
 #import "labs/lab01a.typ": body as lab-01a 
 #import "labs/lab01b.typ": body as lab-01b 

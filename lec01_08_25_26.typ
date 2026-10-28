@@ -1,7 +1,7 @@
 #import "setup.typ": *
 
 #let body = [
-= Lecture 01 - Introduction to CS 374
+= Lecture 01 (Aug 25) - Introduction to CS 374
 
 == Alphabets
 Let Σ be an *alphabet*, an arbitrary *finite* set of *symbols* or *characters*

@@ -1,7 +1,7 @@
 #import "setup.typ": *
 
 #let body = [
-= Lecture 10 - Recursion: Tower of Hanoi and Mergesort
+= Lecture 10 (Sep 29) - Recursion: Tower of Hanoi and Mergesort
 
 #keyidea[*Shrink, trust, combine.* Turn a big problem into smaller copies of
 the same problem. Trust that the copies get solved. Combine the answers.]

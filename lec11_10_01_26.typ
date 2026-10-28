@@ -17,7 +17,7 @@
 }
 
 #let body = [
-= Lecture 11 - Divide and Conquer: Quicksort and Linear Time Selection
+= Lecture 11 (Oct 1) - Divide and Conquer: Quicksort and Linear Time Selection
 
 == Divide and Conquer
 Mergesort is an example of a *divide and conquer* algorithm. There are no hard rules
