@@ -30,6 +30,9 @@
 #outline(title: [Contents])
 #pagebreak()
 
+// Every lecture starts on a new page.
+#show heading.where(level: 1): it => pagebreak(weak: true) + it
+
 #lecture-01
 #lecture-10
 #lecture-11
@@ -38,7 +41,9 @@
 #pagebreak()
 #show: appendix
 = Labs
+// Each lab starts on a new page; Lab 1A shares the page with the appendix title.
 #lab-01a
+#pagebreak()
 #lab-01b
 #pagebreak()
 = Problem Sets
