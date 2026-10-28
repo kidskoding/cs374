@@ -29,7 +29,8 @@
   set enum(spacing: 1.2em)
   set math.cases(gap: 0.6em)
   show math.equation.where(block: true): set block(above: 1.6em, below: 1.6em)
-  show table: it => block(breakable: false, it)
+  // Tables stay on one page, unless labelled <breakable> (long reference tables).
+  show table: it => if it.has("label") and it.label == <breakable> { it } else { block(breakable: false, it) }
   show table: set par(justify: false)
   body
 }
