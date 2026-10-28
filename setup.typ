@@ -251,3 +251,68 @@
   ..values.map(v => box(width: v * 80pt, height: 7pt, fill: color, radius: 1pt)),
   if caption != none { text(size: 0.8em, caption) },
 ))
+
+// Graph drawn from explicit vertex positions (in units of `unit`). `edges` lists
+// (u, v) pairs; with `directed: true` each edge gets an arrowhead at v. Self-loops are
+// skipped. Vertices in `marked` are filled yellow, edges in `bold` are drawn thick,
+// `label` maps a vertex key to the content shown in its circle, and `weight` maps an
+// edge (u, v) to a label drawn beside its midpoint (or none).
+#let graph-pic(
+  pos,
+  edges,
+  directed: false,
+  marked: (),
+  bold: (),
+  unit: 40pt,
+  r: 9pt,
+  label: n => n,
+  size: 0.8em,
+  weight: none,
+) = {
+  let vs = pos.values()
+  let width = unit * calc.max(..vs.map(p => p.at(0))) + 2 * r
+  let height = unit * calc.max(..vs.map(p => p.at(1))) + 2 * r
+  let at(p) = (p.at(0) * unit + r, p.at(1) * unit + r)
+  box(width: width, height: height, {
+    for (a, b) in edges {
+      if a == b { continue }
+      let thick = (a, b) in bold
+      let color = if thick { accent } else { luma(90) }
+      let (x1, y1) = at(pos.at(a))
+      let (x2, y2) = at(pos.at(b))
+      let dx = (x2 - x1) / 1pt
+      let dy = (y2 - y1) / 1pt
+      let d = calc.sqrt(dx * dx + dy * dy)
+      let (ux, uy) = (dx / d, dy / d)
+      let gap = r / 1pt + 1
+      let start = (x1 + ux * gap * 1pt, y1 + uy * gap * 1pt)
+      let end = (x2 - ux * gap * 1pt, y2 - uy * gap * 1pt)
+      place(line(start: start, end: end, stroke: (if thick { 1.6pt } else { 0.6pt }) + color))
+      if directed {
+        let (ex, ey) = end
+        let (bx, by) = (ex - ux * 6pt, ey - uy * 6pt)
+        place(polygon(
+          fill: color,
+          stroke: none,
+          (ex, ey),
+          (bx - uy * 3pt, by + ux * 3pt),
+          (bx + uy * 3pt, by - ux * 3pt),
+        ))
+      }
+      if weight != none {
+        let mx = (x1 + x2) / 2 - uy * 8pt
+        let my = (y1 + y2) / 2 + ux * 8pt
+        place(dx: mx - 8pt, dy: my - 6pt, box(width: 16pt, height: 12pt, align(center + horizon, text(size: 0.75em, fill: warn-color, weight((a, b))))))
+      }
+    }
+    for (name, p) in pos {
+      let (x, y) = at(p)
+      place(dx: x - r, dy: y - r, circle(
+        radius: r,
+        fill: if name in marked { mark-color } else { accent-light },
+        stroke: 0.6pt + accent,
+        align(center + horizon, text(size: size, label(name))),
+      ))
+    }
+  })
+}
