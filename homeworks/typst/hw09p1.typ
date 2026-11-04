@@ -44,11 +44,11 @@ programming over the DAG.
 For every vertex $v in V$, define:
 
 #boxed[
-  $Short(v)$ = the minimum length of a path from $s$ to $v$, \
-  $Long(v)$ = the maximum length of a path from $s$ to $v$,
+  $Short(v)$ = the minimum length of a path from $s$ to $v$ \
+  $Long(v)$ = the maximum length of a path from $s$ to $v$
 ]
 
-where $Short(v) = infinity$ and $Long(v) = -infinity$ if there is no path from
+We set $Short(v) = infinity$ and $Long(v) = -infinity$ if there is no path from
 $s$ to $v$. The algorithm returns #True if $Short(b) = Long(b)$, and #False
 otherwise.
 
@@ -57,12 +57,12 @@ otherwise.
 $
 Short(v) = cases(
   0 & "if" v = s,
-  1 + min_((u, v) in E) Short(u) & "otherwise,",
+  1 + min_((u, v) in E) Short(u) & "otherwise",
 )
 quad quad
 Long(v) = cases(
   0 & "if" v = s,
-  1 + max_((u, v) in E) Long(u) & "otherwise,",
+  1 + max_((u, v) in E) Long(u) & "otherwise",
 )
 $
 
@@ -139,9 +139,9 @@ between $1$ and $k$ while it is alive.
 For every vertex $v in V$ and every integer $1 <= h <= k$, define:
 
 #boxed[
-  $MR(v, h)$ = the maximum number of relics the PC acquires *after* leaving $v$, \
-  over all paths from $v$ to $b$ that the PC survives when it starts at $v$ with
-  health $h$, \ or $-infinity$ if no such path exists.
+  $MR(v, h)$ = the maximum number of relics the PC acquires *after* leaving $v$ \
+  on a path from $v$ to $b$ that the PC survives when it starts at $v$ with health $h$ \
+  ($-infinity$ if there is no such path)
 ]
 
 "Acquires after leaving $v$" means we count $r(w)$ for every vertex $w$ of the
@@ -154,20 +154,20 @@ nothing.
 $
 MR(v, h) = cases(
   0 & "if" v = b,
-  max {r(w) + MR(w, h - Damage(w)) mid(|) (v, w) in E "and" Damage(w) < h} & "otherwise,",
+  max {r(w) + MR(w, h - Damage(w)) mid(|) (v, w) in E "and" Damage(w) < h} & "otherwise",
 )
 $
 
 with $max emptyset = -infinity$ and $1 + (-infinity) = 0 + (-infinity) = -infinity$.
 
-*Base case:* $b$ is the only sink, so the only path from $b$ to $b$ is
+*Base case*: $b$ is the only sink, so the only path from $b$ to $b$ is
 $chevron.l b chevron.r$. The PC is already at $b$ with health $h >= 1$, so it
 has survived, and it acquires no more relics. So $MR(b, h) = 0$.
 
-*Recursive case ($v != b$):* Take any path $v -> w -> dots.c -> b$ that the PC
+*Recursive case ($v != b$)*: Take any path $v -> w -> dots.c -> b$ that the PC
 survives from $v$ with health $h$. Its first edge is some $(v, w) in E$. The PC
-survives entering $w$, so $Damage(w) < h$; it gets $r(w)$ relics at $w$; and it
-stands at $w$ with health $h - Damage(w)$, which is between $1$ and $k$. The rest
+survives entering $w$, so $Damage(w) < h$. It gets $r(w)$ relics at $w$, and it
+then stands at $w$ with health $h - Damage(w)$, which is between $1$ and $k$. The rest
 of the path is a path from $w$ to $b$ that the PC survives from there, so it
 yields at most $MR(w, h - Damage(w))$ more relics. So the left side is at most
 the right side.
@@ -196,8 +196,8 @@ $Damage(w) < h$.
 
 Each entry $MR[v, dot]$ depends only on entries $MR[w, dot]$ at successors $w$ of
 $v$, which come after $v$ in a topological order. So we fill the rows for the
-vertices in *reverse* topological order; within a row, the order of $h$ does not
-matter.
+vertices in *reverse* topological order. Within a row, the order of $h$ does
+not matter.
 
 #algo(
   [#fn[MaxRelics]$(G, s, b, k)$:],
@@ -220,6 +220,6 @@ The topological order takes $O(|V| + |E|)$ time. The array has $|V| k$ entries.
 The entry $MR[v, h]$ takes $O(1 + "outdeg"(v))$ time, so all $k$ entries of
 row $v$ take $O(k (1 + "outdeg"(v)))$ time. Summing over all vertices,
 $sum_v k (1 + "outdeg"(v)) = k (|V| + |E|)$. The algorithm runs in
-#boxed[$O(k (|V| + |E|))$ time.]
+#boxed[$O(k (|V| + |E|))$ time]
 
 #disclosures(sources: [None], llm: llm-note)
