@@ -2,13 +2,16 @@
 
 UIUC CS 374 notes written in Typst. [Read the course book](cs374.pdf).
 
-Install [Typst](https://typst.app/) (tested with 0.15.1) and GNU Make, then run:
+Install [Typst](https://typst.app/) (tested with 0.15.1) and [just](https://github.com/casey/just), then run:
 
 ```sh
-make             # Course book, standalone lectures, and local homework PDFs
-make watch       # Rebuild the book whenever an imported source changes
-make lectures    # Standalone PDFs in lectures/
-make homeworks   # Local homework PDFs in homeworks/pdfs/
+just                 # Course book, lectures, homeworks, labs, and problem sets
+just watch           # Rebuild the book whenever an imported source changes
+just lectures        # Standalone PDFs in lectures/
+just homeworks       # Local homework PDFs in homeworks/pdfs/
+just hw hw09p1       # One homework part
+just lecture lec19_10_29_26   # One lecture
+just --list          # All recipes
 ```
 
 You can also compile or watch individual documents directly, from this directory:
@@ -25,7 +28,7 @@ typst watch --root . homeworks/typst/hw03p2.typ homeworks/pdfs/hw03p2.pdf
 
 Each lecture, lab, and problem set exports a `body` for the book and also compiles
 on its own. To add a lecture, name it `lecNN_MM_DD_YY.typ` (lecture number and date), copy the structure of `lec01_08_25_26.typ`, then import and
-place its body in `cs374.typ` before the appendix block. The Makefile discovers
+place its body in `cs374.typ` before the appendix block. The justfile discovers
 new `lec*.typ` files automatically for standalone PDFs. Add labs and problem sets
 to the book's appendix block in the desired order.
 
