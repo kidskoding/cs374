@@ -63,9 +63,9 @@
 #let body = [
 = Lecture 13 (Oct 8) - Dynamic Programming: Fibonacci Numbers, Faster Text Segmentation
 
-#keyidea[*Dynamic programming = backtracking + bottom-up evaluation:* First get a
-correct recurrence (hard, creative). Then fill a table in the right order (easy,
-mechanical).]
+#keyidea[*Dynamic programming = backtracking + bottom-up evaluation:* We first find a
+correct recurrence, which is the hard and creative step. We then fill a table in the
+right order, which is easy and mechanical.]
 
 == Fibonacci Numbers
 For all integers $n >= 0$:
@@ -92,22 +92,24 @@ RecFibo(n):
     return RecFibo(n − 1) + RecFibo(n − 2)
 ```
 
-Count additions. Two recursive calls, of sizes $n - 1$ and $n - 2$, plus one addition:
+We count additions. Each call makes two recursive calls, of sizes $n - 1$ and $n - 2$,
+and performs one addition:
 
 $ T(n) = T(n - 1) + T(n - 2) + 1, #h(2em) T(0) = T(1) = 1 $
 
-This is the Fibonacci recurrence again, plus $1$. Its solution:
+This is the Fibonacci recurrence again, with an extra $1$. Its solution is
 
 $ T(n) = 2 F_(n + 1) - 1 = Theta(phi^n), #h(2em) phi = (1 + sqrt(5)) / 2 approx 1.618 $
 
-*Exponential* time. You don't need to know how to solve this recurrence.
+so RecFibo runs in exponential time. Solving this recurrence is not required for this
+course.
 
 === Why so slow?
-The call tree for $F_5$ (each node shows the value it computes):
+The call tree for $F_5$ appears below. Each node shows the value it computes.
 
 #align(center, fib-tree(5))
 
-The same values are computed again and again:
+The same values are computed again and again, as the following table shows.
 
 #align(center, table(
   columns: 6,
@@ -117,23 +119,23 @@ The same values are computed again and again:
   [*Times computed*], [1], [2], [3], [5], [3],
 ))
 
-The number of repeats also grows exponentially with $n$. Almost all of the work is
-wasted.
+The number of repeated computations also grows exponentially with $n$, so almost all
+of the work is wasted.
 
 == Memoization
 Michie (1968) proposed *memo functions*. A memo function stores each result. When it
 is called again with the same input, it returns the stored result and does not
-compute it again. Turning a function into a memo function is called *memoization*
-(not a typo for "memorization": think *memo*, a written note).
+compute it again. Turning a function into a memo function is called *memoization*.
+The word is not a typo for "memorization"; it comes from _memo_, a written note.
 
-How to memoize:
-+ Keep a *global* data structure outside the function calls.
-+ On each call, check whether the answer is already stored. If so, use it.
-+ If not, compute it from scratch and *store it* before using it.
+To memoize a recursive algorithm, we proceed as follows.
++ Keep a global data structure outside the function calls.
++ On each call, check whether the answer is already stored. If it is, use it.
++ If it is not, compute it from scratch and store it before using it.
 
-#trap[*Use an array, not a hash table:* Array access is truly $O(1)$. Hash tables are
-$O(1)$ only *in expectation*, which adds a way for your running time (or your
-analysis) to go wrong. Usually a plain array is all you need.]
+#trap[*Use an array, not a hash table:* Array access genuinely takes $O(1)$ time.
+Hash tables take $O(1)$ time only in expectation, which gives the running time (or its
+analysis) one more way to go wrong. A plain array is usually all we need.]
 
 ```
 MemFibo(i):                         ⟨⟨F[2..n] is global⟩⟩
@@ -148,8 +150,8 @@ MemFibo(i):                         ⟨⟨F[2..n] is global⟩⟩
 ```
 
 === Analysis
-The call tree for $F_5$ with memoization. Yellow nodes return immediately with an
-array lookup:
+The call tree for $F_5$ with memoization appears below. Yellow nodes return
+immediately after an array lookup.
 
 #align(center, fib-tree(5, memo: true, unit: 34pt))
 
@@ -162,16 +164,15 @@ array lookup:
   #box(fill: mark-color, stroke: 0.5pt, width: 8pt, height: 8pt) array lookup
 ])
 
-The tree is now a *path* with small leaves hanging off it. Look at what actually
-happens: the algorithm fills the array *in order*, $F[2], F[3], dots, F[n]$, left to
-right. Each entry is filled once, with one addition of two values that are already
-known.
+The tree is now a path with small leaves hanging off it. The algorithm fills the
+array in order, $F[2], F[3], dots, F[n]$, from left to right. Each entry is filled
+once, with one addition of two values that are already known, so the total time is
 
 $ O(n) "entries" times O(1) "each" = #box(stroke: black, inset: 3pt, [$ O(n) $]) $
 
 == Iterative Fibonacci
-The memoized algorithm really just fills the array from small to big. So do that
-*explicitly*, with a loop and no recursion:
+The memoized algorithm simply fills the array from small indices to large ones. We
+can do the same thing explicitly, with a loop and no recursion:
 
 #memo-array(($0$, $1$, $dots$, $i - 2$, $i - 1$, $i$, $dots$, $n$), target: 5, deps: (3, 4), order: [fill order: left to right #sym.arrow.r])
 
@@ -184,13 +185,14 @@ IterFibo(n):
   return F[n]
 ```
 
-One loop, so $O(n)$ additions, and easy to analyze. It is also faster in practice:
-no call stack, no function-call overhead.
+The algorithm is a single loop, so it performs $O(n)$ additions and is easy to
+analyze. It is also faster in practice, because it uses no call stack and has no
+function-call overhead.
 
 == Dynamic Programming
-IterFibo is the first example of *dynamic programming*. It is more than "write a
-recursive algorithm and memoize it", and it is *not* "make a table and fill it in".
-It has two parts, and *both are required*:
+IterFibo is our first example of *dynamic programming*. Dynamic programming involves
+more than writing a recursive algorithm and memoizing it, and it is different from
+making a table and filling it in. It has two parts, and both are required:
 
 #align(center, table(
   columns: (auto, 1fr, 1fr),
@@ -202,77 +204,83 @@ It has two parts, and *both are required*:
   [2 #sym.dot Build bottom-up], [Fill a data structure with subproblem answers, usually iteratively], [*Speed*. Mostly mechanical with practice.],
 ))
 
-*Name:* Bellman popularized the method in the mid-1950s while working on military
-scheduling problems. "Programming" means planning a schedule, as in TV programming,
-not writing code. "Dynamic" because the table changes over time as it fills.
-Today it is probably the most important technique for designing correct, efficient
-algorithms.
+Bellman popularized the method in the mid-1950s while working on military scheduling
+problems. In its name, "programming" means planning a schedule, as in TV programming,
+and has nothing to do with writing code. The method is "dynamic" because the table
+changes over time as it fills. It is now probably the most important technique for
+designing correct, efficient algorithms.
 
-#trap[*Write out every step on homework and exams:* The steps are in Erickson's
+#trap[*Write out every step on homework and exams:* The steps appear in Erickson's
 _Algorithms_ (chapter 3), on the back of the lab handout, and in the grading rubrics.
-Skipping steps costs points, and it is how incorrect algorithms happen.]
+Skipping steps costs points, and it is how incorrect algorithms arise.]
 
 == Faster Text Segmentation
-Recall the problem: given $A[1 .. n]$ and $text("IsWord")$, decide whether $A$ can be
-split into words. Now go through the whole process.
+Recall the text segmentation problem: given $A[1 .. n]$ and $text("IsWord")$, decide
+whether $A$ can be split into words. We now carry out the whole process for this
+problem.
 
 === Part 1: Formulate recursively
-Use backtracking to find the subproblem: a sequence of decisions (the next word), try
-every option, recurse on what is left.
+We use backtracking to find the subproblem. A solution is a sequence of decisions
+(the next word); we try every option for the next decision and recurse on what is
+left.
 
-*(a) Specify the subproblem in English:* Give a *closed definition* of what the
-function returns, like good documentation for a library function.
+*(a) Specify the subproblem in English:* We give a *closed definition* of what the
+function returns, in the manner of good documentation for a library function.
 
 $ text("Splittable")(i) = "True if and only if the suffix" A[i .. n] "can be split into words" $
 
-The definition may refer to the original input $A$. It must *not* say how to compute
-the value, or how the value gets used. It is a well-defined problem on its own. (Same
-idea as context-free grammars: you described the language of each nonterminal on its
-own, without the other nonterminals.)
+The definition may refer to the original input $A$, but it must not say how to
+compute the value or how the value is used. It describes a well-defined problem on
+its own. (The same idea appeared with context-free grammars, where we described the
+language of each nonterminal on its own, without reference to the other
+nonterminals.)
 
-*(b) Give a recurrence:* With $text("IsWord")(i, j)$ true if and only if $A[i .. j]$
-is a word:
+*(b) Give a recurrence:* Let $text("IsWord")(i, j)$ be true if and only if
+$A[i .. j]$ is a word. Then
 
 $ text("Splittable")(i) = cases(
   "True" & "if" i > n,
   limits(or.big)_(j = i)^n (text("IsWord")(i, j) and text("Splittable")(j + 1)) & "otherwise"
 ) $
 
-Prefer a recurrence over recursive pseudocode. It makes part 2 much cleaner.
+We prefer a recurrence to recursive pseudocode, because a recurrence makes part 2 much
+cleaner.
 
-*(c) Say how to answer the original problem:* Call $text("Splittable")(1)$.
+*(c) Say how to answer the original problem:* The answer is
+$text("Splittable")(1)$.
 
-#keyidea[Part 1 is the hard part, and part 2 means nothing without it. Everything
-after this point is mechanical.]
+#keyidea[Part 1 is the difficult step, and part 2 is meaningless without it.
+Everything after this point is mechanical.]
 
 === Part 2: Build solutions bottom-up
-*(a) Identify the subproblems:* List every way the function can be called. Calls
-always move to a larger index and stop just past $n$. So the subproblems are
-$text("Splittable")(i)$ for all $1 <= i <= n + 1$. (For Fibonacci: $F_i$ for all
-$0 <= i <= n$.)
+*(a) Identify the subproblems:* We list every way the function can be called. Each
+call moves to a larger index, and the calls stop just past $n$, so the subproblems
+are $text("Splittable")(i)$ for all $1 <= i <= n + 1$. (For Fibonacci, the
+subproblems are $F_i$ for all $0 <= i <= n$.)
 
-*(b) Choose a memoization data structure:* Usually an array, sometimes
-multidimensional. It must hold every subproblem: here an array
-$text("SplitTable")[1 .. n + 1]$.
+*(b) Choose a memoization data structure:* The data structure is usually an array,
+sometimes a multidimensional one, and it must hold every subproblem. Here we use an
+array $text("SplitTable")[1 .. n + 1]$.
 
-#trap[*Pick descriptive names:* Name the array after the function it stores. Never
-call it `DP`, `OPT`, `ans` or `table`. The grader must be able to tell what is
-stored. Bad names lose points.]
+#trap[*Pick descriptive names:* Name the array after the function whose values it
+stores. Never call it `DP`, `OPT`, `ans` or `table`. The grader must be able to tell
+what the array stores, and bad names lose points.]
 
-*(c) Identify dependencies:* To fill entry $i$, which other entries must already be
-known? Read it off the recurrence. $text("Splittable")(i)$ needs
-$text("Splittable")(j + 1)$ for every $j >= i$: *every entry to its right*. Draw the
-array with arrows into entry $i$:
+*(c) Identify dependencies:* We ask which other entries must already be known
+before we can fill entry $i$, and we read the answer off the recurrence. $text("Splittable")(i)$
+needs $text("Splittable")(j + 1)$ for every $j >= i$, that is, every entry to its
+right. A drawing of the array with arrows into entry $i$ shows these dependencies:
 
 #memo-array(($1$, $dots$, $i$, $i + 1$, $i + 2$, $dots$, $n$, $n + 1$), target: 2, deps: (3, 4, 5, 6, 7), order: [#sym.arrow.l fill order: right to left])
 
-*(d) Find an evaluation order:* Fill each entry only after everything it depends on.
-Dependencies point to *bigger* indices, so go from big to small: $i$ from $n + 1$
-down to $1$. Pseudocode ("for $i <- n + 1$ down to $1$"), words ("right to left"), or a
-big arrow on the drawing all count.
+*(d) Find an evaluation order:* We fill each entry only after every entry it depends
+on. The dependencies point to larger indices, so we go from large indices to small
+ones: $i$ from $n + 1$ down to $1$. The order may be stated as pseudocode ("for
+$i <- n + 1$ down to $1$"), in words ("right to left"), or as a big arrow on the
+drawing; all three are acceptable.
 
-*(e) Write the algorithm:* Wrap the recurrence in loops that follow the evaluation
-order. Copy the recurrence as closely as possible:
+*(e) Write the algorithm:* We wrap the recurrence in loops that follow the evaluation
+order, copying the recurrence as closely as possible:
 
 ```
 FastSplittable(A[1..n]):
@@ -287,23 +295,24 @@ FastSplittable(A[1..n]):
   return SplitTable[1]
 ```
 
-- *No "is it undefined?" check is needed:* The evaluation order guarantees that
+- No "is it undefined?" check is needed, because the evaluation order guarantees that
   $text("SplitTable")[j + 1]$ is already filled when it is read.
-- Erickson fills the base cases first, then loops over the rest. Checking the base
-  case *inside* the loop is also fine, and copies the recurrence more directly.
+- Erickson fills the base cases first and then loops over the remaining entries.
+  Checking the base case inside the loop is also fine, and it copies the recurrence
+  more directly.
 
-*(f) Analyze the running time:* (Number of subproblems) $times$ (time per
-subproblem). There are $n + 1$ subproblems, and each tries $O(n)$ values of $j$. Or
-just read the two nested loops:
+*(f) Analyze the running time:* The running time is the number of subproblems
+$times$ the time per subproblem. There are $n + 1$ subproblems, and each tries $O(n)$
+values of $j$. The two nested loops give the same bound:
 
 $ #box(stroke: black, inset: 3pt, [$ O(n^2) "calls to IsWord" $]) $
 
-Exponential before, quadratic now. (If $text("IsWord")$ took time linear in the word's
-length, the total would be more, perhaps $O(n^3)$.)
+The running time has dropped from exponential to quadratic. (If $text("IsWord")$ took
+time linear in the word's length, the total would be larger, perhaps $O(n^3)$.)
 
 #keyidea[*On homework and exams the pseudocode is optional:* The subproblem
 definition, recurrence, evaluation order and running time already describe the whole
-algorithm. Check the rubric for what is required.]
+algorithm. The rubric states what is required.]
 
 == Summary: the Dynamic Programming Recipe
 #align(center, table(
@@ -323,9 +332,9 @@ algorithm. Check the rubric for what is required.]
   [2f. Running time], [$O(n^2)$ calls to IsWord],
 ))
 
-Next: the lab turns five backtracking solutions for sequence problems into dynamic
-programming algorithms. Next week covers more backtracking patterns that lead to good
-dynamic programming algorithms.
+The accompanying lab turns five backtracking solutions for sequence problems into
+dynamic programming algorithms. The following lectures cover more backtracking
+patterns that lead to good dynamic programming algorithms.
 ]
 
 #show: notes

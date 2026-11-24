@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Take It or Skip It</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main>
+<h1>Take it or skip it</h1>
+<p class="subtitle">Lesson 1 · Dynamic programming · about 15 minutes. One win: write your first DP recurrence and fill its table.</p>
+
+<h2>Bite 1 · Plain recursion repeats itself</h2>
+<p>The Fibonacci rule is <code>F(n) = F(n−1) + F(n−2)</code>. Computed straight from that rule, <code>F(5)</code> asks for <code>F(3)</code> twice, <code>F(2)</code> three times, and <code>F(1)</code> five times. The same small questions get answered again and again, and the time blows up to exponential.</p>
+<p>The fix is to <b>write each answer down the first time you compute it</b>, in an array. After that, looking it up is free. Fibonacci drops to <code>O(n)</code>.</p>
+<p class="source">Source: your notes, <code>lec13_10_08_26.typ</code> ("Why so slow?"), and <a href="https://jeffe.cs.illinois.edu/teaching/algorithms/book/03-dynprog.pdf">Erickson, Chapter 3</a>.</p>
+
+<h2>Bite 2 · DP has two parts</h2>
+<p><span class="step">1</span><b>A recurrence.</b> This is the hard, creative part, and it is what makes the answer <i>correct</i>.</p>
+<p><span class="step">2</span><b>A table, filled in the right order.</b> This is the mechanical part, and it is what makes the answer <i>fast</i>.</p>
+<div class="box"><b>The trick for part 1:</b> make <i>one</i> decision. Try every option. Each option leaves a smaller copy of the same problem, and you trust that copy to be solved (the recursion fairy).</div>
+
+<h2>Bite 3 · One worked example</h2>
+<p><b>Problem.</b> You get an array <code>A[1..n]</code>. Pick numbers, but never two that sit next to each other. Make the sum as big as possible.</p>
+<p><b>Name what you compute.</b> <code>MaxSum(i)</code> = the biggest sum you can pick from <code>A[i..n]</code>.</p>
+<p><b>The one decision:</b> stand at position <code>i</code>. Do you take <code>A[i]</code>?</p>
+<table>
+<tr><th>Option</th><th>What you get</th><th>Where you continue</th></tr>
+<tr><td>Skip <code>A[i]</code></td><td>nothing</td><td><code>i+1</code> (next spot)</td></tr>
+<tr><td>Take <code>A[i]</code></td><td><code>A[i]</code></td><td><code>i+2</code> (<code>i+1</code> is banned)</td></tr>
+</table>
+<p>Write both options as one line, then add the base case:</p>
+<pre><code>MaxSum(i) = max( MaxSum(i+1),  A[i] + MaxSum(i+2) )
+MaxSum(i) = 0    if i &gt; n          ⟨⟨nothing left to pick⟩⟩
+Answer: MaxSum(1)</code></pre>
+<p><b>Fill the table.</b> Each entry needs the entries to its <i>right</i>, so fill from right to left. Here <code>A = [5, 1, 1, 5]</code>:</p>
+<table>
+<tr><th>i</th><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td></tr>
+<tr><th>MaxSum(i)</th><td>0</td><td>0</td><td>max(0, 5+0) = 5</td><td>max(5, 1+0) = 5</td><td>max(5, 1+5) = 6</td><td><b>max(6, 5+5) = 10</b></td></tr>
+</table>
+<p>The answer is 10 (take both 5s). There are <code>n</code> entries and each one costs <code>O(1)</code>, so the running time is <code>O(n)</code>.</p>
+<div class="box"><b>The question that writes every recurrence:</b> "After this choice, where am I allowed to continue?" That position goes inside the recursive call.</div>
+
+<h2>Practice · Your turn</h2>
+
+<div class="q mcq" data-answer="1">
+<p class="prompt">1. You <b>skip</b> <code>A[i]</code>. Which call gives the best from there on?</p>
+<div class="opts"><button>MaxSum(i)</button><button>MaxSum(i+1)</button><button>MaxSum(i+2)</button><button>MaxSum(i+3)</button></div>
+<p class="fb"></p><p class="why">Skipping bans nothing, so you continue at the very next spot.</p>
+</div>
+
+<div class="q mcq" data-answer="2">
+<p class="prompt">2. You <b>take</b> <code>A[i]</code>. You get <code>A[i]</code> plus which call?</p>
+<div class="opts"><button>MaxSum(i)</button><button>MaxSum(i+1)</button><button>MaxSum(i+2)</button><button>MaxSum(i+3)</button></div>
+<p class="fb"></p><p class="why">Taking <code>A[i]</code> bans <code>i+1</code>, so the first free spot is <code>i+2</code>.</p>
+</div>
+
+<div class="q mcq" data-answer="3">
+<p class="prompt">3. <b>New rule:</b> taking <code>A[i]</code> bans both <code>i+1</code> and <code>i+2</code>. You take <code>A[i]</code>. Plus which call?</p>
+<div class="opts"><button>MaxSum(i)</button><button>MaxSum(i+1)</button><button>MaxSum(i+2)</button><button>MaxSum(i+3)</button></div>
+<p class="fb"></p><p class="why">Two spots are banned, so the first free one is <code>i+3</code>. Only this one call changes; the rest of the recurrence stays the same.</p>
+</div>
+
+<div class="q fill">
+<p class="prompt">4. Base case: when <code>i &gt; n</code> there is nothing left. <code>MaxSum(i) =</code> <input data-answer="0" aria-label="base case value"> <button class="check">Check</button></p>
+<p class="fb"></p><p class="why">Picking from an empty list gives a sum of 0.</p>
+</div>
+
+<div class="q mcq" data-answer="0">
+<p class="prompt">5. Which call answers the whole problem?</p>
+<div class="opts"><button>MaxSum(1)</button><button>MaxSum(n)</button><button>MaxSum(0)</button><button>MaxSum(n+1)</button></div>
+<p class="fb"></p><p class="why"><code>MaxSum(1)</code> means "best from <code>A[1..n]</code>", which is the whole array.</p>
+</div>
+
+<div class="q fill">
+<p class="prompt">6. Fill the table for <code>A = [2, 7, 9, 3, 1]</code>, right to left. <code>MaxSum(6)</code> and <code>MaxSum(7)</code> are 0.</p>
+<table>
+<tr><th>i</th><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td></tr>
+<tr><th>MaxSum(i)</th>
+<td><input data-answer="1" aria-label="MaxSum(5)"></td>
+<td><input data-answer="3" aria-label="MaxSum(4)"></td>
+<td><input data-answer="10" aria-label="MaxSum(3)"></td>
+<td><input data-answer="10" aria-label="MaxSum(2)"></td>
+<td><input data-answer="12" aria-label="MaxSum(1)"></td></tr>
+</table>
+<button class="check">Check</button>
+<p class="fb"></p><p class="why">5: max(0, 1+0) = 1 · 4: max(1, 3+0) = 3 · 3: max(3, 9+1) = 10 · 2: max(10, 7+3) = 10 · 1: max(10, 2+10) = 12. The best pick is 2 + 9 + 1.</p>
+</div>
+
+<div class="q mcq" data-answer="2">
+<p class="prompt">7. Why do you fill this table right to left?</p>
+<div class="opts"><button>Arrays always go backwards</button><button>It makes the answers bigger</button><button>Each entry needs later entries</button><button>The base case is in the middle</button></div>
+<p class="fb"></p><p class="why"><code>MaxSum(i)</code> reads <code>MaxSum(i+1)</code> and <code>MaxSum(i+2)</code>, so those must be filled first.</p>
+</div>
+
+<div class="q mcq" data-answer="1">
+<p class="prompt">8. Running time: <code>n</code> entries, each a max of two numbers. Total?</p>
+<div class="opts"><button>O(1)</button><button>O(n)</button><button>O(n²)</button><button>O(2ⁿ)</button></div>
+<p class="fb"></p><p class="why">(number of entries) × (time per entry) = <code>n × O(1)</code>.</p>
+</div>
+
+<nav class="foot">
+<p><b>Read next:</b> <a href="https://jeffe.cs.illinois.edu/teaching/algorithms/book/03-dynprog.pdf">Erickson, Chapter 3 (Dynamic Programming)</a>, the start through Fibonacci. Then reread the "Faster Text Segmentation" section of <code>lec13_10_08_26.typ</code>. It is this exact pattern with "which word comes next?" as the decision.</p>
+<p><b>Keep handy:</b> <a href="../reference/dp-recipe.html">DP recipe cheat sheet</a></p>
+<p><b>Stuck on anything?</b> Ask me in the terminal. I'm your teacher here, and no question is too small.</p>
+</nav>
+</main>
+<div id="score"></div>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

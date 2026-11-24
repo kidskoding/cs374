@@ -10,12 +10,18 @@
 #import "lec17_10_22_26.typ": body as lecture-17
 #import "lec18_10_27_26.typ": body as lecture-18
 #import "lec19_10_29_26.typ": body as lecture-19
+#import "lec20_11_03_26.typ": body as lecture-20
+#import "lec21_11_10_26.typ": body as lecture-21
+#import "lec22_11_12_26.typ": body as lecture-22
+#import "lec23_11_17_26.typ": body as lecture-23
+#import "lec24_11_19_26.typ": body as lecture-24
 
 #import "labs/lab01a.typ": body as lab-01a 
 #import "labs/lab01b.typ": body as lab-01b 
 
 #import "problem-sets/probset01.typ": body as prob-set-01
 #import "final-review.typ": body as final-review
+#import "midterm2-crash-course.typ": body as midterm2-crash-course
 
 #set document(
   title: "UIUC CS 374: Introduction to Algorithms and Models of Computation",
@@ -51,6 +57,11 @@
 #lecture-17
 #lecture-18
 #lecture-19
+#lecture-20
+#lecture-21
+#lecture-22
+#lecture-23
+#lecture-24
 
 // Appendices follow all lectures as back matter.
 #pagebreak()
@@ -65,3 +76,5 @@
 #pagebreak()
 = Problem Sets
 #prob-set-01
+#pagebreak()
+#midterm2-crash-course

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DP Recipe</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main>
+<h1>DP recipe</h1>
+<p class="subtitle">Write every step on exams. Each step is worth rubric points, even if your recurrence is wrong.</p>
+
+<h2>The steps</h2>
+<table>
+<tr><th>Step</th><th style="text-align:left">Write down</th></tr>
+<tr><td>1a</td><td style="text-align:left">English definition of what the function <b>returns</b>. Not how it is computed.</td></tr>
+<tr><td>1b</td><td style="text-align:left">Recurrence, <b>with base cases</b>.</td></tr>
+<tr><td>1c</td><td style="text-align:left">Which call answers the original problem, for example <code>MaxSum(1)</code>.</td></tr>
+<tr><td>2a</td><td style="text-align:left">Range of every parameter, for example <code>1 ≤ i ≤ n+2</code>.</td></tr>
+<tr><td>2b</td><td style="text-align:left">Data structure: an array named after the function.</td></tr>
+<tr><td>2c–d</td><td style="text-align:left">What each entry reads, and a fill order that computes those first.</td></tr>
+<tr><td>2f</td><td style="text-align:left">Running time = (number of entries) × (time per entry).</td></tr>
+</table>
+<p class="source">From <code>final-review.typ</code>, <code>lec13_10_08_26.typ</code>, <code>rubrics/dp.pdf</code>, and <a href="https://jeffe.cs.illinois.edu/teaching/algorithms/book/03-dynprog.pdf">Erickson, Chapter 3</a>.</p>
+
+<h2>Finding the recurrence</h2>
+<ol>
+<li>Make <b>one</b> decision about position <code>i</code>.</li>
+<li>List every option.</li>
+<li>For each option, ask: <b>"after this choice, where am I allowed to continue?"</b></li>
+<li>Combine the options with <code>max</code>, <code>min</code>, or <code>OR</code>.</li>
+</ol>
+
+<h2>Template: take it or skip it</h2>
+<pre><code>MaxSum(i) = best sum picked from A[i..n], no two neighbours
+MaxSum(i) = 0                                     if i &gt; n
+MaxSum(i) = max( MaxSum(i+1),  A[i] + MaxSum(i+2) )  otherwise
+Answer: MaxSum(1) · array MaxSum[1..n+2] · fill i from n down to 1 · O(n)</code></pre>
+<p><a href="../lessons/0001-take-it-or-skip-it.html">← Lesson 1: Take it or skip it</a></p>
+</main>
+</body>
+</html>

@@ -71,31 +71,31 @@
 #let body = [
 = Lecture 15 (Oct 15) - Dynamic Programming on Trees: Woodcutting, Maximum Independent Set
 
-So far, dynamic programming has read one or two arrays from one end to the other.
-Today the recursion has a different shape: it builds a *tree*. This is the last
-lecture on dynamic programming for its own sake.
+So far, our dynamic programming algorithms have read one or two arrays from one end
+to the other. In this lecture the recursion has a different shape: it builds a tree.
+This is the last lecture on dynamic programming for its own sake.
 
-#keyidea[*Make one decision, and the rest splits into independent pieces:* Solve each
-piece recursively and add up the costs. Woodcutting splits a plank into two
-subplanks. Independent set splits a tree into its subtrees.]
+#keyidea[*Make one decision, and the rest splits into independent pieces:* We solve
+each piece recursively and add up the costs. In woodcutting, the decision splits a
+plank into two subplanks; in independent set, it splits a tree into its subtrees.]
 
 == Woodcutting
 === The problem
 A plank of wood has $n - 1$ marks on it. It must be cut at every mark, and only at
-the marks, into $n$ final pieces. Only one company owns a saw big enough. It does
-*one cut at a time* and charges the *length of the plank it is cutting*. Each cut
-gives two smaller planks, which you hand back for more cuts.
+the marks, into $n$ final pieces. Only one company owns a saw big enough for the job.
+The company makes one cut at a time and charges the length of the plank it is
+cutting. Each cut produces two smaller planks, which we hand back for further cuts.
 
-*Input:* an array $text("Len")[1 .. n]$ of the final piece lengths, in order from left
-to right. *Output:* the minimum total cost to make all the cuts.
+The input is an array $text("Len")[1 .. n]$ of the final piece lengths, in order from
+left to right. The output is the minimum total cost of making all the cuts.
 
-*Example:* A plank of length 10 with marks at 2, 3 and 6, so $n = 4$ and
-$text("Len") = [2, 1, 3, 4]$:
+For example, consider a plank of length 10 with marks at 2, 3 and 6, so that $n = 4$
+and $text("Len") = [2, 1, 3, 4]$:
 
 #plank((2, 1, 3, 4))
 
-The first cut always costs \$10, whichever mark it uses. After that, the order
-matters:
+The first cut always costs \$10, whichever mark it uses. After that, the order of the
+cuts affects the total:
 
 #align(center, table(
   columns: (auto, auto, auto),
@@ -108,17 +108,18 @@ matters:
   [Right to left], [at 6 (10), at 3 (6), at 2 (3)], [*\$19*],
 ))
 
-#trap[*The most balanced cut is not always best:* Right to left wins here: the long
-piece of length 4 is cut off first, so you stop paying for it early.]
+#trap[*The most balanced cut is not always best:* The right-to-left strategy wins in
+this example, because it cuts off the long piece of length 4 first and so stops
+paying for that piece early.]
 
 === Part 1: Formulate recursively
-*Decision:* where to make the first cut. It costs the length of the whole plank. It
-leaves a left subplank and a right subplank, and these are *independent* problems:
-how you cut one does not change the cost of the other.
+*Decision:* We decide where to make the first cut. That cut costs the length of the
+whole plank and leaves a left subplank and a right subplank. These are independent
+problems: how we cut one does not change the cost of the other.
 
-The cuts form a *binary tree*. The root is the whole plank, and its two children are
-the two subplanks. Choosing the first cut means choosing the root. The optimal
-strategy for the example:
+The cuts form a binary tree. The root is the whole plank, and its two children are
+the two subplanks, so choosing the first cut means choosing the root. The tree for
+the optimal strategy in the example is shown below.
 
 #align(center, tree-pic(
   (
@@ -133,18 +134,17 @@ strategy for the example:
   (("a", "b"), ("a", "c"), ("b", "d"), ("b", "e"), ("d", "f"), ("d", "g")),
   unit: 60pt, row: 34pt, nw: 52pt,
 ))
-#align(center, text(size: 0.85em)[Internal nodes: the pieces on that plank and the
-cost of its cut. Leaves: final piece lengths.])
+#align(center, text(size: 0.85em)[Each internal node shows the pieces on its plank
+and the cost of cutting that plank. Each leaf shows a final piece length.])
 
-Every subplank holds a *contiguous* run of final pieces, so a pair of indices names
-it.
+Every subplank holds a contiguous run of final pieces, so a pair of indices names it.
 
-*Subproblem:* For $1 <= i <= k <= n$:
+*Subproblem:* For $1 <= i <= k <= n$, we define
 
 $ text("Cutting")(i, k) = "minimum cost to cut the plank made of pieces" text("Len")[i .. k] "into those pieces" $
 
-*Recurrence:* Guess the index $r$ of the first piece in the right subplank. The right
-subplank must not be empty, and neither may the left one, so $i < r <= k$:
+*Recurrence:* We guess the index $r$ of the first piece in the right subplank.
+Neither subplank may be empty, so $i < r <= k$:
 
 $ text("Cutting")(i, k) = cases(
   0 & "if" i = k,
@@ -154,29 +154,31 @@ $ text("Cutting")(i, k) = cases(
 The sum is the cost of the first cut (the length of the whole subplank). The $min$
 tries every place for that cut. A single piece ($i = k$) needs no cuts.
 
-*Original problem:* $text("Cutting")(1, n)$.
+*Original problem:* The answer is $text("Cutting")(1, n)$.
 
-#keyidea[*Try every root. Don't try to be clever:* You don't know which cut goes
-first, so try all of them, and let the recursion handle each side.]
+#keyidea[*Try every root. Don't try to be clever:* We do not know which cut goes
+first, so we try all of them and let the recursion handle each side.]
 
 === Part 2: Build solutions bottom-up
-*Subproblems:* $text("Cutting")(i, k)$ for all $1 <= i <= k <= n$.
+*Subproblems:* The subproblems are $text("Cutting")(i, k)$ for all
+$1 <= i <= k <= n$.
 
-*Data structure:* a 2D array $text("Cutting")[1 .. n, 1 .. n]$. Only the entries with
-$i <= k$ are used.
+*Data structure:* We use a 2D array $text("Cutting")[1 .. n, 1 .. n]$, of which only
+the entries with $i <= k$ are used.
 
 *Dependencies:* Entry $(i, k)$ reads $text("Cutting")(i, r - 1)$ for
-$i <= r - 1 < k$: the *same row, to the left*. It also reads
-$text("Cutting")(r, k)$ for $i < r <= k$: the *same column, below*. For $n = 6$ and
-entry $(2, 5)$:
+$i <= r - 1 < k$, which are the entries in the same row to its left. It also reads
+$text("Cutting")(r, k)$ for $i < r <= k$, which are the entries in the same column
+below it. The figure below shows the dependencies of entry $(2, 5)$ for $n = 6$.
 
 #tri-table(6, hl: (i, k) => if (i, k) == (2, 5) { mark-color } else if (i == 2 and k < 5) or (k == 5 and i > 2) { accent-light } else { none })
 
-#align(center, text(size: 0.85em)[Rows are $i$, columns are $k$. Yellow: the entry
-being filled. Blue: the entries it reads. Gray: unused ($i > k$).])
+#align(center, text(size: 0.85em)[Rows are indexed by $i$ and columns by $k$. The
+yellow cell is the entry being filled, the blue cells are the entries it reads, and
+the gray cells ($i > k$) are unused.])
 
-*Evaluation order:* Any order that fills the row to the left and the column below
-first. Three choices work:
+*Evaluation order:* Any order works that fills the row to the left and the column
+below before the entry itself. Three such orders are compared below.
 
 #align(center, table(
   columns: (auto, auto, auto),
@@ -189,18 +191,19 @@ first. Three choices work:
   [Diagonal by diagonal], [Short subplanks first ($k - i = 0, 1, 2, dots$)], [Correct, but the indices are easy to get wrong],
 ))
 
-#trap[*The two loops go in opposite directions*: one counts up, one counts down. Read
-each direction off the dependency drawing. Don't assume both go the same way.]
+#trap[*The two loops go in opposite directions:* One counts up and the other counts
+down. Read each direction off the dependency drawing instead of assuming that both
+go the same way.]
 
 *Running time:* Each entry adds up to $n$ lengths and tries up to $n$ values of $r$,
-so $O(n)$ time per entry. (Erickson precomputes the sums, but it doesn't change the
-answer here.) There are $O(n^2)$ entries:
+so it takes $O(n)$ time. (Erickson precomputes the sums, but doing so does not change
+the answer here.) There are $O(n^2)$ entries, so the total time is
 
 $ O(n^2) "subproblems" times O(n) "each" = #box(stroke: black, inset: 3pt, [$ O(n^3) $]) $
 
-On homework, you can stop here. The pseudocode is just nested loops, and it is no
-easier to read than the steps above. For reference (Erickson's book names the array
-`MinCost`):
+On homework, a solution may stop here. The pseudocode consists only of nested loops,
+and it is no easier to read than the steps above. We give it for reference; Erickson's
+book names the array `MinCost`.
 
 ```
 Woodcut(Len[1..n]):
@@ -215,42 +218,46 @@ Woodcut(Len[1..n]):
   return Cutting[1, n]
 ```
 
-*The example, filled in:* $text("Len") = [2, 1, 3, 4]$, row by row from the bottom:
+For the example $text("Len") = [2, 1, 3, 4]$, filling the table row by row from the
+bottom gives the following values.
 
 #let wood = ((0, 3, 9, 19), (none, 0, 4, 12), (none, none, 0, 7), (none, none, none, 0))
 #tri-table(4, val: (i, k) => [#wood.at(i - 1).at(k - 1)], hl: (i, k) => if (i, k) == (1, 4) { mark-color } else { none })
 
 For example, $text("Cutting")(1, 4) = 10 + min(0 + 12, 3 + 7, 9 + 0) = 19$. The best
-first cut is $r = 4$: cut off the last piece, as in the right-to-left strategy.
+first cut is $r = 4$, which cuts off the last piece, as in the right-to-left
+strategy.
 
 == Maximum Independent Set in Trees
 === The problem
 Let $G = (V, E)$ be a graph. An *independent set* is a subset $S subset.eq V$ such
-that *no edge has both endpoints in $S$*. The goal: find the largest one.
+that no edge has both endpoints in $S$. Our goal is to find the largest independent
+set.
 
-In a general graph this is *NP-hard* (later in the semester). There is probably no
-polynomial-time algorithm, not even an $O(n^(100))$ one. So restrict the input to a
-*rooted tree* $T$ with $n$ nodes and root $r$. Nodes may have any number of children:
-it is not necessarily a binary tree. Rooted trees are recursive: a root, plus a
-rooted subtree for each child.
+In a general graph this problem is NP-hard, as we will see later in the course, so
+there is probably no polynomial-time algorithm for it, not even an $O(n^(100))$ one.
+We therefore restrict the input to a rooted tree $T$ with $n$ nodes and root $r$.
+Nodes may have any number of children, so $T$ is not necessarily a binary tree.
+Rooted trees are recursive: a rooted tree consists of a root, plus a rooted subtree
+for each child.
 
 === Part 1: Formulate recursively
-*Decision:* is the root in the set or not?
-- *Root not in the set:* Its children are all allowed. There are no edges between
-  different subtrees, so take the best independent set of each child's subtree and
-  combine them.
-- *Root in the set:* Every child shares an edge with the root, so no child is
-  allowed. The children's subtrees below them are free: take the best set in each
-  *grandchild's* subtree, plus the root.
+*Decision:* We decide whether the root is in the set.
+- If the root is not in the set, its children are all allowed. There are no edges
+  between different subtrees, so we take the best independent set in each child's
+  subtree and combine them.
+- If the root is in the set, no child is allowed, because every child shares an edge
+  with the root. The subtrees below the children are free, so we take the best set in
+  each grandchild's subtree, plus the root.
 
-The recursive calls are always on subtrees. Name a subtree by its root, as with
-binary search trees in CS 225.
+The recursive calls are always on subtrees, and we name a subtree by its root, as
+with binary search trees in CS 225.
 
-*Subproblem:* For each node $v$:
+*Subproblem:* For each node $v$, we define
 
 $ text("MIS")(v) = "the size of the largest independent set in the subtree rooted at" v $
 
-*Notation:* $w arrow.b v$ means "$w$ is a child of $v$".
+We write $w arrow.b v$ to mean that $w$ is a child of $v$.
 
 *Recurrence:*
 
@@ -262,29 +269,32 @@ $ text("MIS")(v) = max {
 No separate base case is needed. At a leaf both sums are empty, so
 $text("MIS")("leaf") = max{0, 1} = 1$.
 
-*Original problem:* $text("MIS")(r)$.
+*Original problem:* The answer is $text("MIS")(r)$.
 
 === Part 2: Build solutions bottom-up
-*Subproblems:* one per node $v$.
+*Subproblems:* There is one subproblem per node $v$.
 
-*Data structure:* The subproblems are named by nodes, not integers, so an array no
-longer fits. Store each answer in a *field on the node*: $v.text("MIS")$. (Same idea as
-a distance field on each vertex in Dijkstra's algorithm.)
+*Data structure:* The subproblems are named by nodes rather than integers, so an
+array no longer fits. We store each answer in a field on the node, $v.text("MIS")$.
+(This is the same idea as the distance field on each vertex in Dijkstra's algorithm.)
 
-*Dependencies:* $v$ reads its children and grandchildren: nodes *below* $v$.
+*Dependencies:* Each node $v$ reads its children and grandchildren, which are nodes
+below $v$.
 
-*Evaluation order:* *postorder*. It visits all of a node's descendants before the
-node.
+*Evaluation order:* We evaluate the nodes in *postorder*, which visits all of a
+node's descendants before the node itself.
 
 #keyidea[*"Evaluate in postorder" is a complete answer:* Computing a postorder is a
-black-box algorithm you may use. Compute it, then loop over the nodes in that order.
-The same answer works for directed acyclic graphs next week.]
+black-box algorithm that we may use. We compute it and then loop over the nodes in
+that order. The same answer works for directed acyclic graphs, which appear in a
+later lecture.]
 
-*Running time:* The usual (number of subproblems) $times$ (time per subproblem) gives
-a bound that is far too big. The time per node varies a lot: one node may have
-$n slash 2$ children while most have none. Max time $times$ count gives $O(n^2)$.
+*Running time:* The usual bound, (number of subproblems) $times$ (time per
+subproblem), is far too big here. The time per node varies widely: one node may have
+$n slash 2$ children while most nodes have none. Multiplying the maximum time by the
+number of nodes gives $O(n^2)$.
 
-Instead, *add up the work and charge it to the node being read*. Node $v$ costs
+Instead, we add up the work and charge it to the node being read. Node $v$ costs
 $O(1 + \#"children" + \#"grandchildren")$. Each node is
 - a child of at most one node, so it is read as a child at most once in total;
 - a grandchild of at most one node, so it is read as a grandchild at most once in
@@ -294,28 +304,31 @@ So all the reads add up to $O(n)$, and the total is
 
 $ O(n) "for the nodes" + O(n) "child reads" + O(n) "grandchild reads" = #box(stroke: black, inset: 3pt, [$ O(n) $]) $
 
-This is only an analysis trick: the algorithm does nothing extra. (Another view: there
-is one child read per edge, and a tree has $n - 1$ edges.)
+This charging argument belongs to the analysis only; the algorithm does nothing
+extra. (Equivalently, there is one child read per edge, and a tree has $n - 1$
+edges.)
 
 #trap[*For tree and graph DP, don't multiply the maximum time per subproblem by the
-number of subproblems.* Add the work over all nodes, and charge each read to the node
-(or edge) it touches.]
+number of subproblems.* Instead, add the work over all nodes, and charge each read to
+the node (or edge) it touches.]
 
 === A cleaner version: two subproblems
-Split the subproblem in two, by whether $v$ is in the set:
+We can split the subproblem in two, according to whether $v$ is in the set:
 
 $ text("MISyes")(v) &= "largest independent set in" v"'s subtree that" "must contain" v \
   text("MISno")(v) &= "largest independent set in" v"'s subtree that" "must not contain" v $
 
-If $v$ is in, no child is: there is no decision. If $v$ is out, each child is free:
-take the better of in and out.
+If $v$ is in the set, no child is, so there is no decision to make. If $v$ is not in
+the set, each child is free, and we take the better of the two options for that
+child.
 
 $ text("MISyes")(v) &= 1 + sum_(w arrow.b v) text("MISno")(w) \
   text("MISno")(v) &= sum_(w arrow.b v) max { text("MISyes")(w), text("MISno")(w) } $
 
-The two recurrences call each other, but there are no grandchildren sums. The answer
-is $max{text("MISyes")(r), text("MISno")(r)}$. Store two fields on each node. Each
-node still depends only on its children, so evaluate in postorder: $O(n)$ time.
+The two recurrences call each other, but they contain no sums over grandchildren.
+The answer is $max{text("MISyes")(r), text("MISno")(r)}$. We store two fields on each
+node. Each node depends only on its children, so we again evaluate in postorder, and
+the algorithm runs in $O(n)$ time.
 
 ```
 TreeMIS(T):
@@ -328,8 +341,8 @@ TreeMIS(T):
   return max(r.yes, r.no)
 ```
 
-*Example:* Each node shows $text("MISyes") slash text("MISno")$. Yellow nodes form a
-maximum independent set of size $max{5, 6} = 6$:
+In the example below, each node shows $text("MISyes") slash text("MISno")$, and the
+yellow nodes form a maximum independent set of size $max{5, 6} = 6$.
 
 #let mis-node(name, yes, no) = [$#name$ \ #text(size: 0.85em)[#yes / #no]]
 #align(center, tree-pic(
@@ -349,8 +362,9 @@ maximum independent set of size $max{5, 6} = 6$:
 ))
 
 For example, $text("MISyes")(c) = 1 + text("MISno")(f) = 3$, and
-$text("MISno")(r) = 2 + 1 + 3 = 6$ (the better value of $a$, $b$ and $c$). The set:
-leave out $r$, $a$ and $f$; take $b$, $c$, $d$, $e$, $g$, $h$.
+$text("MISno")(r) = 2 + 1 + 3 = 6$ (the sum of the better value at each of $a$, $b$
+and $c$). The set leaves out $r$, $a$ and $f$ and takes $b$, $c$, $d$, $e$, $g$ and
+$h$.
 
 == Summary
 #align(center, table(
